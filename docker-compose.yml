@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:5.6
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - restaurante-bridge
+    ports:
+      - "3306:3306"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-service
+    hostname: rabbitmq-service
+    networks:
+      - restaurante-bridge
+    ports:
+      - "15672:15672"  # Management UI
+      - "5672:5672"    # RabbitMQ default port
+
+  item-service:
+    image: itemservice:v4  # Atualizando para v4
+    container_name: item-service
+    networks:
+      - restaurante-bridge
+    ports:
+      - "8080:80"
+
+  restaurante-service:
+    image: restauranteservice:v4  # Atualizando para v4
+    container_name: restaurante-service
+    networks:
+      - restaurante-bridge
+    ports:
+      - "8081:80"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
+    networks:
+      - restaurante-bridge
+    ports:
+      - "3000:3000"
+
+networks:
+  restaurante-bridge:
+    driver: bridge

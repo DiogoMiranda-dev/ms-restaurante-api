@@ -33,7 +33,7 @@ public class ItemController : ControllerBase
         return Ok(_mapper.Map<IEnumerable<ItemReadDto>>(itens));
     }
 
-    [HttpGet("{ItemId}", Name = "GetItemForRestaurante")]
+    [HttpGet("{itemId}", Name = "GetItemForRestaurante")]
     public ActionResult<ItemReadDto> GetItemForRestaurante(int restauranteId, int itemId)
     {
         if (!_repository.RestauranteExiste(restauranteId))
@@ -67,7 +67,7 @@ public class ItemController : ControllerBase
         var itemReadDto = _mapper.Map<ItemReadDto>(item);
 
         return CreatedAtRoute(nameof(GetItemForRestaurante),
-            new { restauranteId, ItemId = itemReadDto.Id }, itemReadDto);
+            new { restauranteId, itemId = itemReadDto.Id }, itemReadDto);
     }
 
 }
